@@ -1,0 +1,63 @@
+from django.shortcuts import render
+
+from django.db.models import Q
+from django.urls import reverse_lazy
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+
+from .models import Movie
+from .forms import MovieForm
+
+
+class MovieListView(ListView):
+    """List movies with search (name/genre/director), sorting and pagination."""
+    model = Movie
+    template_name = 'movie_list.html'
+    context_object_name = 'movies'
+    paginate_by = 8
+    ordering = ['name']
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get('q', '').strip()
+        if q:
+            qs = qs.filter(
+                Q(name__icontains=q) | Q(genre__icontains=q) | Q(director__icontains=q)
+            )
+        sort = self.request.GET.get('sort')
+        if sort in ('name', '-rating', '-release_date'):
+            qs = qs.order_by(sort)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['q'] = self.request.GET.get('q', '')
+        ctx['sort'] = self.request.GET.get('sort', '')
+        return ctx
+
+
+class MovieDetailView(DetailView):
+    model = Movie
+    template_name = 'movie_detail.html'
+
+
+class MovieCreateView(SuccessMessageMixin, CreateView):
+    model = Movie
+    form_class = MovieForm
+    template_name = 'movie_form.html'
+    success_url = reverse_lazy('movie_list')
+    success_message = "Movie added successfully!"
+
+
+class MovieUpdateView(SuccessMessageMixin, UpdateView):
+    model = Movie
+    form_class = MovieForm
+    template_name = 'movie_form.html'
+    success_url = reverse_lazy('movie_list')
+    success_message = "Movie updated successfully!"
+
+
+class MovieDeleteView(DeleteView):
+    model = Movie
+    template_name = 'delete_movie.html'
+    success_url = reverse_lazy('movie_list')

@@ -1,0 +1,23 @@
+/* Pink theme: overrides Bootstrap's colour variables and components */
+:root {
+  --bs-primary: #e83e8c;
+  --bs-primary-rgb: 232, 62, 140;
+  --pink-soft: #fff0f6;
+  --pink-mid: #ff80ab;
+  --pink-deep: #c2185b;
+}
+body { background: var(--pink-soft); min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+.navbar { background: linear-gradient(90deg, var(--pink-mid), #e83e8c); }
+.navbar .navbar-brand, .navbar .nav-link { color: #fff !important; }
+.btn-primary { background: var(--pink-deep); border-color: var(--pink-deep); }
+.btn-primary:hover { background: #ad1457; border-color: #ad1457; }
+.btn-outline-primary { color: var(--pink-deep); border-color: var(--pink-deep); }
+.btn-outline-primary:hover { background: var(--pink-deep); border-color: var(--pink-deep); }
+.card { border: none; border-radius: 1rem; box-shadow: 0 4px 14px rgba(232, 62, 140, .15); transition: transform .15s; }
+.card:hover { transform: translateY(-4px); }
+.badge-genre { background: var(--pink-mid); color: #fff; }
+.form-control:focus, .form-select:focus { border-color: #e83e8c; box-shadow: 0 0 0 .25rem rgba(232, 62, 140, .25); }
+.page-link { color: var(--pink-deep); }
+.page-item.active .page-link { background: var(--pink-deep); border-color: var(--pink-deep); color: #fff; }
+footer { background: #fce4ec; color: var(--pink-deep); }
